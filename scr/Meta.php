@@ -17,7 +17,7 @@ class Meta
   public $site = '';
   public $auteur = '';
   public $cheminIcon = 'images/icon/';
-  public $logo = 'favicon.png';
+  public $favicon = 'favicon.png';
   public $manifest = 'manifest.json';
   public $chemin = '';
 
@@ -51,11 +51,15 @@ class Meta
    * @param  string $file
    * @return void
    */
-  public function Fichier(string $file)
+  public function Fichier(string $file=null)
   {
     if (empty($this->option)) {
       $this->setOption();
     }
+    if (empty($file)){
+      $file = basename($_SERVER['PHP_SELF']);
+    }
+   
     $html = file_get_contents($file);
     $html = $this->removBalise($html);
     if (!empty($this->manifest)) {
@@ -216,7 +220,7 @@ class Meta
 
     $this->base["description"] = '<meta name="description" content="' . ($this->app??$this->site ). '">';
     $this->base["keywords"] = '<meta name="keywords" content="' . ($this->app??$this->site ). '">';
-    $this->Image($this->logo, 'favicon.ico', 16, 16, 'ico');
+    $this->Image($this->favicon, 'favicon.ico', 16, 16, 'ico');
     copy($this->cheminIcon . 'favicon.ico', '' . basename($this->cheminIcon . 'favicon.ico'));
     $this->base["shortcut icon"] = '<link href="favicon.ico" rel="shortcut icon" type="image/x-icon">';
     $this->base["screen-orientation"] = '<meta name="screen-orientation" content="portrait">';
@@ -238,11 +242,11 @@ class Meta
     // $this->base[] = '<!-- imagemode - show image even in text only mode  -->';
     $this->base["imagemode"] = '<meta name="imagemode" content="force">';
     //  $this->base[] = '<!-- Main Link Tags  -->';
-    $this->Image($this->logo, 'favicon-16.png', 16, 16);
+    $this->Image($this->favicon, 'favicon-16.png', 16, 16);
     $this->base["favicon-16.png"] = '<link href="' . $this->cheminIcon . 'favicon-16.png" rel="icon" type="image/png" sizes="16x16">';
-    $this->Image($this->logo, 'favicon-32.png', 32, 32);
+    $this->Image($this->favicon, 'favicon-32.png', 32, 32);
     $this->base["favicon-32.png"] = '<link href="' . $this->cheminIcon . 'favicon-32.png" rel="icon" type="image/png" sizes="32x32">';
-    $this->Image($this->logo, 'favicon-48.png', 48, 48);
+    $this->Image($this->favicon, 'favicon-48.png', 48, 48);
     $this->base["favicon-48.png"] = '<link href="' . $this->cheminIcon . 'favicon-48.png" rel="icon" type="image/png" sizes="48x48">';
 
     $this->base["distribution"] = '<meta name="distribution" content="Global">';
@@ -266,10 +270,10 @@ class Meta
     if (!empty($this->couleur)) {
       $this->windows["msapplication-navbutton-color"] = '<meta name="msapplication-navbutton-color" content="'.$this->couleur.'">';
       $this->windows["msapplication-TileColor"] = '<meta name="msapplication-TileColor" content="' . $this->couleur . '">';
-      // $this->Image($this->logo, '48x48icon.png', 48, 48, 'svg');
+      // $this->Image($this->favicon, '48x48icon.png', 48, 48, 'svg');
       // $this->windows["mask-icon"] = '<link href="' . $this->cheminIcon . 'icon.svg" rel="mask-icon" size="any" color="' . $this->couleur . '">';
     }
-    $this->Image($this->logo, 'ms-icon-144x144.png', 144, 144);
+    $this->Image($this->favicon, 'ms-icon-144x144.png', 144, 144);
     $this->windows["msapplication-TileImage"] = '<meta name="msapplication-TileImage" content="' . $this->cheminIcon . 'ms-icon-144x144.png">';
     $this->Browser(); //generer broserconfig
     $this->windows["msapplication-config"] = '<meta name="msapplication-config" content="' . $this->cheminIcon . 'browserconfig.xml">';
@@ -289,9 +293,9 @@ class Meta
   {
     // $this->android[] = '<!-- Android -->';
     $this->android["mobile-web-app-capable"]  = '<meta name="mobile-web-app-capable" content="yes">';
-    $this->Image($this->logo, 'icon-192x192.png', 192, 192);
+    $this->Image($this->favicon, 'icon-192x192.png', 192, 192);
     $this->android["icon-192x192.png"]  = '<link href="' . $this->cheminIcon . 'icon-192x192.png" rel="icon" sizes="192x192">';
-    $this->Image($this->logo, 'icon-128x128.png', 128, 128);
+    $this->Image($this->favicon, 'icon-128x128.png', 128, 128);
     $this->android["icon-128x128.png"]  = '<link href="' . $this->cheminIcon . 'icon-128x128.png" rel="icon" sizes="128x128">';
 
 
@@ -306,20 +310,20 @@ class Meta
     // $this->ios[] = '<!-- iOS  -->';
     $this->ios["apple-mobile-web-app-capable"] = '<meta name="apple-mobile-web-app-capable" content="yes">';
     $this->ios["apple-mobile-web-app-status-bar-style"] = '<meta name="apple-mobile-web-app-status-bar-style" content="default">';
-    $this->Image($this->logo, 'touch-icon-iphone.png', 128, 128);
+    $this->Image($this->favicon, 'touch-icon-iphone.png', 128, 128);
     $this->ios["touch-icon-iphone.png"] = '<link href="' . $this->cheminIcon . 'touch-icon-iphone.png" rel="apple-touch-icon">';
-    $this->Image($this->logo, 'touch-icon-ipad.png', 76, 76);
+    $this->Image($this->favicon, 'touch-icon-ipad.png', 76, 76);
     $this->ios["touch-icon-ipad.png"] = '<link href="' . $this->cheminIcon . 'touch-icon-ipad.png" rel="apple-touch-icon" sizes="76x76">';
-    $this->Image($this->logo, 'touch-icon-iphone-retina.png', 120, 120);
+    $this->Image($this->favicon, 'touch-icon-iphone-retina.png', 120, 120);
     $this->ios["touch-icon-iphone-retina.png"] = '<link href="' . $this->cheminIcon . 'touch-icon-iphone-retina.png" rel="apple-touch-icon" sizes="120x120">';
-    $this->Image($this->logo, 'touch-icon-ipad-retina.png', 152, 152);
+    $this->Image($this->favicon, 'touch-icon-ipad-retina.png', 152, 152);
     $this->ios["touch-icon-ipad-retina.png"] = '<link href="' . $this->cheminIcon . 'touch-icon-ipad-retina.png" rel="apple-touch-icon" sizes="152x152">';
     //$this->ios[] = '<!-- Startup Image  -->';
-    $this->Image($this->logo, 'touch-icon-start-up-320x480.png', 320, 480);
+    $this->Image($this->favicon, 'touch-icon-start-up-320x480.png', 320, 480);
     $this->ios["touch-icon-start-up-320x480.png"] = '<link href="' . $this->cheminIcon . 'touch-icon-start-up-320x480.png" rel="apple-touch-startup-image">';
-    $this->Image($this->logo, 'icon-52x52.png', 52, 52);
+    $this->Image($this->favicon, 'icon-52x52.png', 52, 52);
     $this->ios["icon-52x52.png"] = '<link href="' . $this->cheminIcon . 'icon-52x52.png" rel="apple-touch-icon-precomposed" sizes="57x57">';
-    $this->Image($this->logo, 'icon-72x72.png', 72, 72);
+    $this->Image($this->favicon, 'icon-72x72.png', 72, 72);
     $this->ios["icon-72x72.png"] = '<link href="' . $this->cheminIcon . 'icon-72x72.png" rel="apple-touch-icon" sizes="72x72">';
     if (!empty($this->app)) {
       $this->ios["apple-mobile-web-app-title"] = '<meta name="apple-mobile-web-app-title" content="' . $this->app . '">';
@@ -380,7 +384,7 @@ class Meta
       $manifest["display"] = "standalone";
     }
     if (empty($manifest["icons"])) {
-      $this->Image($this->logo, 'icon-48x48.png', 48, 48);
+      $this->Image($this->favicon, 'icon-48x48.png', 48, 48);
       $manifest["icons"][] = [
         "src" => $this->cheminIcon . "icon-48x48.png",
         "sizes" => "48x48",
@@ -395,7 +399,7 @@ class Meta
     foreach ($tailles as $taille) {
       if (!in_array($taille, $existing_sizes)) {
         $t = $taille . 'x' . $taille;
-        $this->Image($this->logo, "icon-" . $t . ".png", $taille, $taille);
+        $this->Image($this->favicon, "icon-" . $t . ".png", $taille, $taille);
         $manifest["icons"][] = [
           "src" => $this->cheminIcon . "icon-" . $t . ".png",
           "sizes" => $t,
@@ -408,19 +412,18 @@ class Meta
 
   private function Browser()
   {
-    $this->Image($this->logo, 'icon70.png', 70, 70);
-    $this->Image($this->logo, 'icon150.png', 150, 150);
-    $this->Image($this->logo, 'icon310.png', 310, 150);
-    $this->Image($this->logo, 'icon3103.png', 310, 310);
+    $this->Image($this->favicon, 'icon70.png', 70, 70);
+    $this->Image($this->favicon, 'icon150.png', 150, 150);
+    $this->Image($this->favicon, 'icon310.png', 310, 150);
+    $this->Image($this->favicon, 'icon3103.png', 310, 310);
     $browser = '<?xml version="1.0" encoding="utf-8"?>
-
     <browserconfig>
       <msapplication>
         <tile>
-          <square70x70logo src="icon70.png"/>
-          <square150x150logo src="icon150.png"/>
-          <wide310x150logo src="icon310.png"/>
-          <square310x310logo src="icon3103.png"/>
+          <square70x70favicon src="icon70.png"/>
+          <square150x150favicon src="icon150.png"/>
+          <wide310x150favicon src="icon310.png"/>
+          <square310x310favicon src="icon3103.png"/>
         </tile>
       </msapplication>
     </browserconfig>';
@@ -429,12 +432,12 @@ class Meta
   }
 
 
-  public function Image(string $imgSrc, string $logo, int $width = 16, int $height = 16, string $format = 'png', int $quality = 85)
+  public function Image(string $imgSrc, string $favicon, int $width = 16, int $height = 16, string $format = 'png', int $quality = 85)
   {
     if (!file_exists($this->cheminIcon)) {
       mkdir($this->cheminIcon, 0777, true);
     }
-    $image_dest =  $this->cheminIcon . $logo;
+    $image_dest =  $this->cheminIcon . $favicon;
 
     $src = $imgSrc;
     if (!file_exists($image_dest)) {
@@ -468,7 +471,7 @@ class Meta
           $svg .= '<foreignObject width="100%" height="100%">' . "\n";
           $svg .= '<div xmlns="http://www.w3.org/1999/xhtml">' . "\n";
           $svg .= '<style>img { width: 100%; height: 100%; }</style>' . "\n";
-          $svg .= '<img src="' . $image_dest . '" alt="' . $logo . '" />' . "\n";
+          $svg .= '<img src="' . $image_dest . '" alt="' . $favicon . '" />' . "\n";
           $svg .= '</div>' . "\n";
           $svg .= '</foreignObject>' . "\n";
           $svg .= '</svg>';

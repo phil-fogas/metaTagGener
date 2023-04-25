@@ -23,10 +23,10 @@ $html='<!DOCTYPE html><html lang="fr" class="no-js"><head></head><body></body></
 echo $meta->Ecrire($html); //le html à modifier
 ```
 ## Options disponibles
-setOption() : tableau avec les noms des systèmes d'exploitation (par exemple, ['android']) pour spécifier un système d'exploitation
-setCouleur() : pour définir la couleur du contour du site (par exemple, '#000' pour noir)
-setApp() : pour définir le nom du site (par exemple, 'mon site')
-setSite() : pour définir l'adresse du site (par exemple, 'https://votreSite.fr/')
+setOption() : tableau avec les noms des systèmes d'exploitation (par exemple, ['android']) pour spécifier un système d'exploitation.
+setCouleur() : pour définir la couleur du contour du site (par exemple, '#000' pour noir).
+setApp() : pour définir le nom du site (par exemple, 'mon site').
+setSite() : pour définir l'adresse du site (par exemple, 'https://votreSite.fr/').
 
 ## Exigences
 PHP 7.4 ou supérieur

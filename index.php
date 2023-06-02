@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-include './scr/meta.php';
+include './scr/Meta.php';
 $meta = new Meta;
 
 $meta->setSite('meta');
@@ -15,7 +15,6 @@ $meta->Fichier();
 <html lang="fr-FR" class="no-js">
 
 <head>
-
 
 </head>
 

@@ -1,6 +1,6 @@
 
-## MetaTagGener
-MetaTagGener est un outil qui vous permet d'ajouter des méta tags et des liens dans la section <head> de vos pages HTML, de créer des icônes compatibles avec tous les systèmes d'exploitation et de générer un fichier webmanifest.
+## MetaTagGener v1
+MetaTagGener est un outil qui vous permet d'ajouter des méta tags et des link dans la section <head> de vos pages HTML, de créer des icônes compatibles avec tous les systèmes d'exploitation et de générer un fichier webmanifest.
 
 ## Fonctionnalités
 - Vérifie si des méta et des liens sont présents et supprime les doublons éventuels<br>
@@ -29,7 +29,7 @@ echo $meta->Ecrire($html); //le html à modifier
 - setSite() : pour définir l'adresse du site (par exemple, 'https://votreSite.fr/'). <br>
 
 ## Exigences
-- PHP 7.4 ou supérieur\n
+- PHP 8 ou supérieur<br>
 - Une image favicon.png de grande taille à la racine <br>
 - Un fichier index.php ou index.phtml contenant votre mise en page avec les balises <head> </head> même vides <br>
 

@@ -35,6 +35,7 @@ class Meta
    */
   public function Ecrire(string $html)
   {
+    $mani = [];
     if (isset($mani[1])) {
       $this->setManifest($mani[1]);
     }
@@ -42,8 +43,6 @@ class Meta
       $this->setOption();
     }
     preg_match('/<link\s+rel="manifest"\s+href="(.+?)"/', $html, $mani);
-
-    
     return $this->addBalise((string)$html);
   }
 
@@ -66,12 +65,10 @@ class Meta
     if (empty($file)) {
       $file = basename($_SERVER['PHP_SELF']);
     }
-
     $html = $this->addBalise((string)$html);
 
     file_put_contents($file, $html);
   }
-
 
   /**
    * addBalise
@@ -86,7 +83,7 @@ class Meta
     foreach ($this->option as $balises) {
 
       foreach ($balises as $id => $balise) {
-        if (strpos($html, $id) !== false) {
+        if (str_contains($html, $id)) {
           // Vérifier si l'élément est une balise <meta>
           $start = strpos($html, '<meta name="' . $id . '"');
           $tag = 'meta';
@@ -103,7 +100,7 @@ class Meta
           }
         }
 
-        if (strpos($html, $id) === false) {
+        if (!str_contains($html, $id)) {
           // La balise n'existe pas encore, il faut l'ajouter
           $pos = strpos($html, '</head>');
           if ($pos !== false) {
@@ -116,9 +113,6 @@ class Meta
         }
       }
     }
-    
-    
-
     return $html;
   }
 
@@ -153,8 +147,6 @@ class Meta
     $this->base["title"] = '<meta name="title" content="' . $this->app . '" />';
     $this->base["abstract"] = '<meta name="abstract" content="' . $this->app . '" />';
   }
-
-
 
   public function setAuteur(string $auteur)
   {
@@ -204,7 +196,7 @@ class Meta
     $this->mini["charset=UTF-8"] = '<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />';
     $this->mini["viewport"] = '<meta name="viewport" content="width=device-width, initial-scale=1">';
 
-    $this->mini["<title>"] = empty($this->app) ? '<title>Page</title>' : '<title>' . $this->app . '</title>';
+   // $this->mini["<title>"] = empty($this->app) ? '<title>Page</title>' : '<title>' . $this->app . '</title>';
 
     return $this->mini;
   }
@@ -214,8 +206,8 @@ class Meta
     //$this->base[] = '<!-- Other -->';
     $this->base["X-UA-Compatible"] = '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
 
-    $this->base["description"] = '<meta name="description" content="' . ($this->app ?? $this->site) . '">';
-    $this->base["keywords"] = '<meta name="keywords" content="' . ($this->app ?? $this->site) . '">';
+   // $this->base["description"] = '<meta name="description" content="' . ($this->app ?? $this->site) . '">';
+   // $this->base["keywords"] = '<meta name="keywords" content="' . ($this->app ?? $this->site) . '">';
 
     $this->Image($this->favicon, 'favicon.ico', 16, 16, 'ico');
     copy($this->cheminIcon . 'favicon.ico', '' . basename($this->cheminIcon . 'favicon.ico'));
@@ -256,7 +248,7 @@ class Meta
     $this->base["copyright"] = '<meta name="copyright" content="' .$this->auteur .' '. $this->app . '©' . date('Y') . '" />';
     $this->base["robots"] = '<meta name="robots" content="All" />';
     if (!empty($this->manifest)) {
-    $this->base["manifest"] = '<link rel="manifest" href="' . $this->manifest . '">';
+    $this->base["manifest"] = '<link rel="manifest" href="/' . $this->manifest . '" crossorigin="use-credentials" />';
      }
 
     return $this->base;
@@ -295,7 +287,6 @@ class Meta
     $this->android["icon-192x192.png"]  = '<link rel="icon" href="' . $this->cheminIcon . 'icon-192x192.png" sizes="192x192">';
     $this->Image($this->favicon, 'icon-128x128.png', 128, 128);
     $this->android["icon-128x128.png"]  = '<link rel="icon" href="' . $this->cheminIcon . 'icon-128x128.png" sizes="128x128">';
-
 
     if (!empty($this->couleur)) {
       $this->android["theme-color"] = '<meta name="theme-color" content="' . $this->couleur . '">';
@@ -354,9 +345,9 @@ class Meta
       $manifest["short_name"] =  $this->app;
     }
 
-    if (empty($manifest["related_applications"]) && !empty($this->site)) {
-      $manifest["related_applications"] = ["platform" => "webapp", "url" => $this->site];
-    }
+   // if (empty($manifest["related_applications"]) && !empty($this->site)) {
+    //  $manifest["related_applications"] = ["platform" => "webapp", "url" => $this->site];
+    //}
 
     if (empty($manifest["theme_color"]) && !empty($this->couleur)) {
       $manifest["theme_color"] = $this->couleur;
@@ -382,12 +373,12 @@ class Meta
       $manifest["orientation"] = "portrait";
     }
 
-    if (empty($manifest["prefer_related_applications"])) {
-      $manifest["prefer_related_applications"] = true;
+    if (empty($manifest["related_applications"])) {
+      $manifest["related_applications"] = true;
     }
 
-    if (empty($manifest["gcm_sender_id"])) {
-      $manifest["gcm_sender_id"] = "";
+    if (empty($manifest["sender_id"])) {
+      $manifest["sender_id"] = "";
     }
 
     if (empty($manifest["gcm_user_visible_only"])) {
@@ -451,7 +442,7 @@ class Meta
   }
 
 
-  public function Image(string $imgSrc, string $favicon, int $width = 16, int $height = 16, string $format = 'png', int $quality = 85)
+  public function Image(string $imgSrc, string $favicon, int $width = 16, int $height = 16, string $format = 'png', int $quality = 95)
   {
     if (!file_exists($this->cheminIcon)) {
       mkdir($this->cheminIcon, 0777, true);
@@ -510,7 +501,7 @@ class Meta
     }
   }
 
-  private function CouleurFont($color, $percent)
+  private function CouleurFont($color, $percent): string
   {
     // Convertir la couleur hexadécimale en RGB
     $rgb = sscanf($color, "#%02x%02x%02x");
